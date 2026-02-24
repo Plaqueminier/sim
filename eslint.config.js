@@ -1,22 +1,15 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
-import tseslint from 'typescript-eslint'
-import eslintPluginPrettier from 'eslint-plugin-prettier/recommended'
-import { defineConfig, globalIgnores } from 'eslint/config'
+import js from '@eslint/js';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
+import eslintPluginPrettier from 'eslint-plugin-prettier/recommended';
+import eslintPluginSvelte from 'eslint-plugin-svelte';
+import { defineConfig, globalIgnores } from 'eslint/config';
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  globalIgnores(['dist', '.svelte-kit', 'build', 'node_modules']),
   {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      js.configs.recommended,
-      tseslint.configs.recommended,
-      reactHooks.configs.flat.recommended,
-      reactRefresh.configs.vite,
-      eslintPluginPrettier,
-    ],
+    files: ['**/*.{ts,js}'],
+    extends: [js.configs.recommended, tseslint.configs.recommended, eslintPluginPrettier],
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
@@ -33,4 +26,17 @@ export default defineConfig([
       ],
     },
   },
-])
+  ...eslintPluginSvelte.configs['flat/recommended'],
+  ...eslintPluginSvelte.configs['flat/prettier'],
+  {
+    files: ['**/*.svelte'],
+    languageOptions: {
+      parserOptions: {
+        parser: tseslint.parser,
+      },
+    },
+    rules: {
+      'svelte/no-navigation-without-resolve': 'off',
+    },
+  },
+]);
