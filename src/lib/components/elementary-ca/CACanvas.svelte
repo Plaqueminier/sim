@@ -43,7 +43,7 @@
   });
 </script>
 
-<div class="overflow-auto bg-gray-800 rounded-lg p-4" style="max-height: 450px">
+<div class="bg-gray-800 rounded-lg p-4">
   <canvas
     bind:this={canvas}
     width={width * cellSize}

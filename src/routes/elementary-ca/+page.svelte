@@ -14,8 +14,6 @@
   let initialState: 'single' | 'random' = $state('single');
   let animationSpeed = $state(50);
   let isAnimating = $state(false);
-  let seed = $state(0);
-
   let grid: number[][] = $state.raw([]);
   let visibleRows = $state(0);
   let animationTimer: ReturnType<typeof setTimeout> | undefined;
@@ -60,17 +58,11 @@
     }
   }
 
-  function handleRegenerate(): void {
-    stopAnimation();
-    seed++;
-  }
-
   $effect(() => {
     rule;
     width;
     generations;
     initialState;
-    seed;
     stopAnimation();
     computeGrid();
   });
@@ -81,7 +73,7 @@
 </script>
 
 <div class="min-h-screen bg-gray-900 text-white p-6">
-  <div class="max-w-6xl mx-auto">
+  <div class="mx-auto max-w-7xl">
     <div class="mb-6">
       <a href="/" class="text-gray-400 hover:text-white text-sm">← Back to home</a>
     </div>
@@ -99,7 +91,6 @@
       bind:animationSpeed
       {isAnimating}
       onToggleAnimation={handleToggleAnimation}
-      onRegenerate={handleRegenerate}
     />
 
     <div class="my-6">

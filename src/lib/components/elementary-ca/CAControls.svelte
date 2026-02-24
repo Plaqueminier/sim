@@ -18,7 +18,6 @@
     animationSpeed = $bindable(),
     isAnimating,
     onToggleAnimation,
-    onRegenerate,
   }: {
     rule: number;
     initialState: 'single' | 'random';
@@ -29,7 +28,6 @@
     animationSpeed: number;
     isAnimating: boolean;
     onToggleAnimation: () => void;
-    onRegenerate: () => void;
   } = $props();
 
   function clampRule(value: string): void {
@@ -39,8 +37,8 @@
 
 <div class="space-y-6">
   <div class="flex flex-wrap gap-6">
-    <div class="flex flex-col gap-2">
-      <label class="text-sm text-gray-400">Rule (0-255)</label>
+    <label class="flex flex-col gap-2">
+      <span class="text-sm text-gray-400">Rule (0-255)</span>
       <input
         type="number"
         min="0"
@@ -49,10 +47,10 @@
         oninput={(e) => clampRule(e.currentTarget.value)}
         class="w-24 px-3 py-2 bg-gray-800 rounded border border-gray-700 focus:border-blue-500 outline-none"
       />
-    </div>
+    </label>
 
     <div class="flex flex-col gap-2">
-      <label class="text-sm text-gray-400">Presets</label>
+      <span class="text-sm text-gray-400">Presets</span>
       <div class="flex gap-2 flex-wrap">
         {#each PRESET_RULES as preset (preset.num)}
           <button
@@ -70,7 +68,7 @@
 
   <div class="flex flex-wrap gap-6 items-end">
     <div class="flex flex-col gap-2">
-      <label class="text-sm text-gray-400">Initial</label>
+      <span class="text-sm text-gray-400">Initial</span>
       <div class="flex gap-2">
         <button
           onclick={() => (initialState = 'single')}
@@ -91,38 +89,38 @@
       </div>
     </div>
 
-    <div class="flex flex-col gap-2">
-      <label class="text-sm text-gray-400">Alive</label>
+    <label class="flex flex-col gap-2">
+      <span class="text-sm text-gray-400">Alive</span>
       <input
         type="color"
         bind:value={colorAlive}
         class="w-12 h-9 rounded cursor-pointer bg-transparent border-0"
       />
-    </div>
+    </label>
 
-    <div class="flex flex-col gap-2">
-      <label class="text-sm text-gray-400">Dead</label>
+    <label class="flex flex-col gap-2">
+      <span class="text-sm text-gray-400">Dead</span>
       <input
         type="color"
         bind:value={colorDead}
         class="w-12 h-9 rounded cursor-pointer bg-transparent border-0"
       />
-    </div>
+    </label>
 
-    <div class="flex flex-col gap-2">
-      <label class="text-sm text-gray-400">Width: {width}</label>
+    <label class="flex flex-col gap-2">
+      <span class="text-sm text-gray-400">Width: {width}</span>
       <input
         type="range"
         min="51"
-        max="401"
+        max="801"
         step="2"
         bind:value={width}
         class="w-28 accent-blue-500"
       />
-    </div>
+    </label>
 
-    <div class="flex flex-col gap-2">
-      <label class="text-sm text-gray-400">Gens: {generations}</label>
+    <label class="flex flex-col gap-2">
+      <span class="text-sm text-gray-400">Gens: {generations}</span>
       <input
         type="range"
         min="50"
@@ -130,10 +128,10 @@
         bind:value={generations}
         class="w-28 accent-blue-500"
       />
-    </div>
+    </label>
 
-    <div class="flex flex-col gap-2">
-      <label class="text-sm text-gray-400">Speed</label>
+    <label class="flex flex-col gap-2">
+      <span class="text-sm text-gray-400">Speed</span>
       <input
         type="range"
         min="1"
@@ -141,7 +139,7 @@
         bind:value={animationSpeed}
         class="w-20 accent-blue-500"
       />
-    </div>
+    </label>
   </div>
 
   <div class="flex gap-3">
@@ -152,12 +150,6 @@
         : 'bg-green-600 hover:bg-green-700'}"
     >
       {isAnimating ? 'Stop' : '▶ Animate'}
-    </button>
-    <button
-      onclick={onRegenerate}
-      class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded font-medium"
-    >
-      {initialState === 'random' ? 'Randomize' : 'Regenerate'}
     </button>
   </div>
 </div>
