@@ -15,9 +15,12 @@
     colorDead = $bindable(),
     width = $bindable(),
     generations = $bindable(),
-    animationSpeed = $bindable(),
+    animationDuration = $bindable(),
+    maxWidth,
     isAnimating,
     onToggleAnimation,
+    fullscreen = $bindable(),
+    onFitWidth,
   }: {
     rule: number;
     initialState: 'single' | 'random';
@@ -25,9 +28,12 @@
     colorDead: string;
     width: number;
     generations: number;
-    animationSpeed: number;
+    animationDuration: number;
+    maxWidth: number;
     isAnimating: boolean;
+    fullscreen: boolean;
     onToggleAnimation: () => void;
+    onFitWidth: () => void;
   } = $props();
 
   function clampRule(value: string): void {
@@ -109,14 +115,23 @@
 
     <label class="flex flex-col gap-2">
       <span class="text-sm text-gray-400">Width: {width}</span>
-      <input
-        type="range"
-        min="51"
-        max="801"
-        step="2"
-        bind:value={width}
-        class="w-28 accent-blue-500"
-      />
+      <div class="flex items-center gap-2">
+        <input
+          type="range"
+          min="51"
+          max={maxWidth}
+          step="2"
+          bind:value={width}
+          class="w-28 accent-blue-500"
+        />
+        <button
+          onclick={onFitWidth}
+          class="px-2 py-0.5 rounded text-xs bg-gray-700 hover:bg-gray-600 text-gray-300"
+          title="Fit to window width"
+        >
+          fit
+        </button>
+      </div>
     </label>
 
     <label class="flex flex-col gap-2">
@@ -124,25 +139,26 @@
       <input
         type="range"
         min="50"
-        max="300"
+        max="10000"
         bind:value={generations}
         class="w-28 accent-blue-500"
       />
     </label>
 
     <label class="flex flex-col gap-2">
-      <span class="text-sm text-gray-400">Speed</span>
+      <span class="text-sm text-gray-400">Duration: {animationDuration}s</span>
       <input
         type="range"
         min="1"
-        max="100"
-        bind:value={animationSpeed}
-        class="w-20 accent-blue-500"
+        max="30"
+        step="1"
+        bind:value={animationDuration}
+        class="w-28 accent-blue-500"
       />
     </label>
   </div>
 
-  <div class="flex gap-3">
+  <div class="flex gap-3 items-center">
     <button
       onclick={onToggleAnimation}
       class="px-4 py-2 rounded font-medium {isAnimating
@@ -151,5 +167,9 @@
     >
       {isAnimating ? 'Stop' : '▶ Animate'}
     </button>
+    <label class="flex items-center gap-1.5 text-sm text-gray-400">
+      <input type="checkbox" bind:checked={fullscreen} class="accent-blue-500" />
+      Fullscreen
+    </label>
   </div>
 </div>

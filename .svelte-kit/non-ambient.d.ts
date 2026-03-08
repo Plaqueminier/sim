@@ -35,7 +35,7 @@ declare module "$app/types" {
 			"/": Record<string, never>;
 			"/elementary-ca": Record<string, never>
 		};
-		Pathname(): "/" | "/elementary-ca" | "/elementary-ca/";
+		Pathname(): "/" | "/elementary-ca";
 		ResolvedPathname(): `${"" | `/${string}`}${ReturnType<AppTypes['Pathname']>}`;
 		Asset(): "/vite.svg" | string & {};
 	}
