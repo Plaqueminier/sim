@@ -1,29 +1,37 @@
 # Sim
 
-Simulation playground — cellular automata and future simulations.
+Simulation playground — cellular automata, sorting, and future simulations.
 
 ## Stack
 
-- SvelteKit 5 (Svelte 5 runes: `$state`, `$effect`, `$derived`, `$props`, `$bindable`)
+- React 19 + TypeScript
+- Vite 6
+- TanStack Router (file-based routing)
 - Tailwind 4 (utility-first, `@import 'tailwindcss'` in app.css)
-- TypeScript, Vite
+- shadcn/ui (Radix primitives, copied into `src/components/ui/`)
 - Canvas 2D for rendering
 
 ## Structure
 
-- `src/lib/ca-engine.ts` — pure CA computation (no DOM)
-- `src/lib/effects/` — reusable visual effect modules (bloom, gradients, backgrounds, cell rendering)
-- `src/lib/effects/types.ts` — shared effect config types
-- `src/lib/components/elementary-ca/` — CA-specific UI components
-- `src/routes/elementary-ca/` — elementary CA page (state owner)
-- `static/` — static assets served by SvelteKit
+```
+src/
+  components/
+    ui/               ← shadcn atoms (Button, Slider, Switch, Card, etc.)
+    controls/         ← molecules (LabeledSlider, LabeledSwitch, OptionGroup, ColorPicker)
+    simulation/       ← generic simulation shell (SimulationPage, CanvasRenderer)
+  hooks/              ← shared hooks (use-animation, use-canvas)
+  engines/            ← pure computation, no React (elementary-ca.ts, etc.)
+  simulations/        ← one folder per simulation, self-contained
+    elementary-ca/    ← engine, canvas, controls, effects, index page
+  routes/             ← TanStack Router file-based routes
+```
 
 ## Conventions
 
 - Effects are pure functions: receive canvas ctx + config, draw. No classes, no internal state.
-- All effect state owned by page component, passed down as `EffectsConfig` prop.
-- Components use `$bindable()` for two-way binding of controls.
-- Dark theme (gray-900 base). Tailwind utility classes only, no custom CSS.
+- Engines are pure functions: config in, data out. No React, no DOM.
+- Each simulation owns its state in its index.tsx page component.
+- Dark theme. Tailwind utility classes only, no custom CSS.
 - `image-rendering: pixelated` for square cell mode, removed for organic shapes.
 
 ## Dev
@@ -32,8 +40,7 @@ Uses **bun** (not npm).
 
 ```
 bun dev         # start dev server
-bun run build   # production build
-bun run check   # svelte-check
+bun run build   # tsc + vite build
 ```
 
 ## Plan Mode
