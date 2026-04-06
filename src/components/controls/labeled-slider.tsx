@@ -8,6 +8,7 @@ interface LabeledSliderProps {
   min: number;
   max: number;
   step: number;
+  accent?: string;
 }
 
 export function LabeledSlider({
@@ -17,12 +18,16 @@ export function LabeledSlider({
   min,
   max,
   step,
+  accent,
 }: LabeledSliderProps) {
   return (
-    <div className="flex-1 space-y-1">
+    <div
+      className="flex-1 space-y-1"
+      style={accent ? { "--sim-accent": accent } as React.CSSProperties : undefined}
+    >
       <div className="flex items-center justify-between gap-2">
         <Label className="text-xs text-muted-foreground">{label}</Label>
-        <span className="text-xs tabular-nums text-muted-foreground">
+        <span className="text-xs tabular-nums font-mono text-muted-foreground">
           {value}
         </span>
       </div>

@@ -1,6 +1,8 @@
-import { useState, useMemo, useCallback } from "react";
+import { useMemo, useCallback } from "react";
 import { SimulationPage } from "@/components/simulation";
+import { PlaybackBar, StatDisplay } from "@/components/controls";
 import { useAnimation } from "@/hooks/use-animation";
+import { useSimulationState } from "@/hooks/use-simulation-state";
 import { generateGrid } from "@/engines/elementary-ca";
 import { defaultEffectsConfig } from "./effects/types";
 import { Controls } from "./controls";
@@ -9,6 +11,7 @@ import { RuleVisualization } from "./rule-visualization";
 import { CACanvas } from "./ca-canvas";
 
 const CELL_SIZE = 3;
+const BASE_DURATION_MS = 5000;
 
 function computeMaxWidth(): number {
   if (typeof window === "undefined") return 201;
@@ -16,94 +19,114 @@ function computeMaxWidth(): number {
   return w % 2 === 0 ? w - 1 : w;
 }
 
+const initialMaxWidth = computeMaxWidth();
+
 export function ElementaryCA() {
-  const [maxWidth, setMaxWidth] = useState(computeMaxWidth);
-  const [rule, setRule] = useState(30);
-  const [width, setWidth] = useState(maxWidth);
-  const [generations, setGenerations] = useState(150);
-  const [colorAlive, setColorAlive] = useState("#ffffff");
-  const [colorDead, setColorDead] = useState("#0a0a0a");
-  const [initialState, setInitialState] = useState<"single" | "random">("single");
-  const [animationDuration, setAnimationDuration] = useState(5);
-  const [effectsConfig, setEffectsConfig] = useState(defaultEffectsConfig);
-  const [fullscreen, setFullscreen] = useState(false);
-  const [seed, setSeed] = useState(0);
+  const [state, update] = useSimulationState({
+    rule: 30,
+    width: initialMaxWidth,
+    maxWidth: initialMaxWidth,
+    generations: 150,
+    colorAlive: "#ffffff",
+    colorDead: "#0a0a0a",
+    initialState: "single" as "single" | "random",
+    effectsConfig: defaultEffectsConfig(),
+    seed: 0,
+    speed: 1,
+  });
 
   const grid = useMemo(
-    () => generateGrid(rule, width, generations, initialState),
+    () => generateGrid(state.rule, state.width, state.generations, state.initialState),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [rule, width, generations, initialState, seed],
+    [state.rule, state.width, state.generations, state.initialState, state.seed],
   );
 
-  const anim = useAnimation(generations, animationDuration * 1000);
+  const anim = useAnimation(state.generations, BASE_DURATION_MS / state.speed);
 
-  const handleToggleAnimation = useCallback(() => {
-    if (anim.isPlaying) {
-      anim.reset();
-      if (document.fullscreenElement) {
-        document.exitFullscreen().catch(() => {});
-      }
-    } else {
-      setSeed((s) => s + 1);
-      if (fullscreen) {
-        document.getElementById("ca-canvas-wrapper")?.requestFullscreen().catch(() => {});
-      }
-      anim.play();
-    }
-  }, [anim, fullscreen]);
+  const handlePlay = useCallback(() => {
+    update({ seed: state.seed + 1 });
+    anim.play();
+  }, [anim, state.seed, update]);
+
+  const handleReset = useCallback(() => {
+    anim.reset();
+  }, [anim]);
 
   const handleFitWidth = useCallback(() => {
     const mw = computeMaxWidth();
-    setMaxWidth(mw);
-    setWidth(mw);
-  }, []);
+    update({ maxWidth: mw, width: mw });
+  }, [update]);
+
+  const aliveCount = useMemo(() => {
+    let count = 0;
+    for (const row of grid) {
+      for (const cell of row) {
+        if (cell === 1) count++;
+      }
+    }
+    return count;
+  }, [grid]);
+
+  const totalCells = state.width * state.generations;
+  const alivePercent = totalCells > 0 ? ((aliveCount / totalCells) * 100).toFixed(1) : "0";
 
   return (
     <SimulationPage
       title="Elementary Cellular Automata"
       description="Explore Wolfram's 256 rules of 1D binary cellular automata"
+      accent="var(--sim-ca)"
+      playback={
+        <PlaybackBar
+          isPlaying={anim.isPlaying}
+          onPlay={handlePlay}
+          onPause={anim.pause}
+          onReset={handleReset}
+          speed={state.speed}
+          onSpeedChange={(speed) => update({ speed })}
+        />
+      }
       controls={
         <>
           <Controls
-            rule={rule}
-            onRuleChange={setRule}
-            initialState={initialState}
-            onInitialStateChange={setInitialState}
-            colorAlive={colorAlive}
-            onColorAliveChange={setColorAlive}
-            colorDead={colorDead}
-            onColorDeadChange={setColorDead}
-            width={width}
-            onWidthChange={setWidth}
-            maxWidth={maxWidth}
-            generations={generations}
-            onGenerationsChange={setGenerations}
-            animationDuration={animationDuration}
-            onAnimationDurationChange={setAnimationDuration}
-            isPlaying={anim.isPlaying}
-            onToggleAnimation={handleToggleAnimation}
-            fullscreen={fullscreen}
-            onFullscreenChange={setFullscreen}
+            state={state}
+            update={update}
             onFitWidth={handleFitWidth}
           />
           <div className="my-4">
-            <EffectsPanel config={effectsConfig} onChange={setEffectsConfig} />
+            <EffectsPanel
+              config={state.effectsConfig}
+              onChange={(effectsConfig) => update({ effectsConfig })}
+            />
           </div>
-          <div className="my-6">
-            <RuleVisualization rule={rule} colorAlive={colorAlive} colorDead={colorDead} />
+          <div className="my-4">
+            <RuleVisualization
+              rule={state.rule}
+              colorAlive={state.colorAlive}
+              colorDead={state.colorDead}
+            />
           </div>
         </>
       }
+      stats={
+        <StatDisplay
+          stats={[
+            { label: "Rule", value: state.rule },
+            { label: "Width", value: state.width },
+            { label: "Generations", value: state.generations },
+            { label: "Alive", value: `${alivePercent}%` },
+          ]}
+        />
+      }
       canvas={
         <CACanvas
-          width={width}
-          generations={generations}
+          width={state.width}
+          generations={state.generations}
           cellSize={CELL_SIZE}
-          colorAlive={colorAlive}
-          colorDead={colorDead}
+          colorAlive={state.colorAlive}
+          colorDead={state.colorDead}
           grid={grid}
           visibleRows={anim.currentStep}
-          effectsConfig={effectsConfig}
+          effectsConfig={state.effectsConfig}
           isAnimating={anim.isPlaying}
         />
       }

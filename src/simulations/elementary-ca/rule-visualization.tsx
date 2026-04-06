@@ -12,9 +12,9 @@ export function RuleVisualization({
   colorDead,
 }: RuleVisualizationProps) {
   return (
-    <div className="p-3 bg-gray-800 rounded-lg">
+    <div className="p-3 bg-surface-1 rounded-lg">
       <div className="flex gap-3 flex-wrap items-center">
-        <span className="text-sm text-gray-400">Rule {rule}:</span>
+        <span className="text-sm text-muted-foreground font-mono">Rule {rule}:</span>
         {PATTERNS.map((i) => {
           const pattern = i.toString(2).padStart(3, "0");
           const output = (rule >> i) & 1;
@@ -32,7 +32,7 @@ export function RuleVisualization({
                   />
                 ))}
               </div>
-              <span className="text-gray-500 text-xs">→</span>
+              <span className="text-muted-foreground text-xs">→</span>
               <div
                 className="w-3 h-3 rounded-sm"
                 style={{

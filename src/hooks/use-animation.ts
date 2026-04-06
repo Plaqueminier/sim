@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 
-export interface AnimationControls {
+interface AnimationControls {
   currentStep: number;
   isPlaying: boolean;
   play: () => void;

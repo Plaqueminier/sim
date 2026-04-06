@@ -1,31 +1,24 @@
 import { Button } from "@/components/ui/button";
 import {
   LabeledSlider,
-  LabeledSwitch,
   OptionGroup,
   ColorPicker,
+  ControlPanel,
 } from "@/components/controls";
 
-interface ControlsProps {
+interface CAState {
   rule: number;
-  onRuleChange: (v: number) => void;
   initialState: "single" | "random";
-  onInitialStateChange: (v: "single" | "random") => void;
   colorAlive: string;
-  onColorAliveChange: (v: string) => void;
   colorDead: string;
-  onColorDeadChange: (v: string) => void;
   width: number;
-  onWidthChange: (v: number) => void;
   maxWidth: number;
   generations: number;
-  onGenerationsChange: (v: number) => void;
-  animationDuration: number;
-  onAnimationDurationChange: (v: number) => void;
-  isPlaying: boolean;
-  onToggleAnimation: () => void;
-  fullscreen: boolean;
-  onFullscreenChange: (v: boolean) => void;
+}
+
+interface ControlsProps {
+  state: CAState;
+  update: (patch: Partial<CAState>) => void;
   onFitWidth: () => void;
 }
 
@@ -34,43 +27,22 @@ const initialStateOptions = [
   { value: "random" as const, label: "Random" },
 ];
 
-export function Controls({
-  rule,
-  onRuleChange,
-  initialState,
-  onInitialStateChange,
-  colorAlive,
-  onColorAliveChange,
-  colorDead,
-  onColorDeadChange,
-  width,
-  onWidthChange,
-  maxWidth,
-  generations,
-  onGenerationsChange,
-  animationDuration,
-  onAnimationDurationChange,
-  isPlaying,
-  onToggleAnimation,
-  fullscreen,
-  onFullscreenChange,
-  onFitWidth,
-}: ControlsProps) {
+export function Controls({ state, update, onFitWidth }: ControlsProps) {
   return (
-    <div className="space-y-4">
+    <ControlPanel title="Parameters" defaultOpen>
       <div className="flex flex-wrap gap-4 items-end">
         <LabeledSlider
           label="Rule"
-          value={rule}
-          onChange={onRuleChange}
+          value={state.rule}
+          onChange={(rule) => update({ rule })}
           min={0}
           max={255}
           step={1}
         />
         <OptionGroup
           options={initialStateOptions}
-          value={initialState}
-          onChange={onInitialStateChange}
+          value={state.initialState}
+          onChange={(initialState) => update({ initialState })}
         />
       </div>
 
@@ -78,10 +50,10 @@ export function Controls({
         <div className="flex items-end gap-2">
           <LabeledSlider
             label="Width"
-            value={width}
-            onChange={onWidthChange}
+            value={state.width}
+            onChange={(width) => update({ width })}
             min={11}
-            max={maxWidth}
+            max={state.maxWidth}
             step={2}
           />
           <Button variant="ghost" size="sm" onClick={onFitWidth} className="text-xs h-7">
@@ -90,8 +62,8 @@ export function Controls({
         </div>
         <LabeledSlider
           label="Generations"
-          value={generations}
-          onChange={onGenerationsChange}
+          value={state.generations}
+          onChange={(generations) => update({ generations })}
           min={10}
           max={500}
           step={10}
@@ -99,24 +71,9 @@ export function Controls({
       </div>
 
       <div className="flex flex-wrap gap-4 items-center">
-        <ColorPicker label="Alive" value={colorAlive} onChange={onColorAliveChange} />
-        <ColorPicker label="Dead" value={colorDead} onChange={onColorDeadChange} />
+        <ColorPicker label="Alive" value={state.colorAlive} onChange={(colorAlive) => update({ colorAlive })} />
+        <ColorPicker label="Dead" value={state.colorDead} onChange={(colorDead) => update({ colorDead })} />
       </div>
-
-      <div className="flex flex-wrap gap-4 items-center">
-        <LabeledSlider
-          label="Animation (s)"
-          value={animationDuration}
-          onChange={onAnimationDurationChange}
-          min={1}
-          max={30}
-          step={1}
-        />
-        <LabeledSwitch label="Fullscreen" checked={fullscreen} onChange={onFullscreenChange} />
-        <Button onClick={onToggleAnimation} size="sm">
-          {isPlaying ? "Stop" : "Animate"}
-        </Button>
-      </div>
-    </div>
+    </ControlPanel>
   );
 }

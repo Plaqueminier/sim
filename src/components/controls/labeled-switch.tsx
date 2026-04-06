@@ -1,21 +1,27 @@
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
+import { Toggle } from "@/components/ui/toggle";
 
 interface LabeledSwitchProps {
   label: string;
   checked: boolean;
   onChange: (checked: boolean) => void;
+  accent?: string;
 }
 
 export function LabeledSwitch({
   label,
   checked,
   onChange,
+  accent,
 }: LabeledSwitchProps) {
   return (
-    <div className="flex items-center gap-2">
-      <Switch checked={checked} onCheckedChange={onChange} />
-      <Label className="text-sm">{label}</Label>
-    </div>
+    <Toggle
+      variant="outline"
+      size="sm"
+      pressed={checked}
+      onPressedChange={onChange}
+      style={accent ? { "--sim-accent": accent } as React.CSSProperties : undefined}
+    >
+      {label}
+    </Toggle>
   );
 }

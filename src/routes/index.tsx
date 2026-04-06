@@ -1,23 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
+import { SimulationCard, simulations } from "@/components/catalog";
 
 export const Route = createFileRoute("/")({
   component: Home,
 });
-
-const simulations = [
-  {
-    path: "/elementary-ca" as const,
-    title: "Elementary Cellular Automata",
-    description:
-      "Explore Wolfram's 256 rules of 1D binary cellular automata. Watch patterns emerge from simple rules, from chaos to fractals to Turing completeness.",
-  },
-];
 
 function Home() {
   return (
@@ -30,15 +16,17 @@ function Home() {
 
         <div className="grid gap-4">
           {simulations.map((sim) => (
-            <Link key={sim.path} to={sim.path} className="block">
-              <Card className="hover:bg-accent transition-colors">
-                <CardHeader>
-                  <CardTitle className="text-2xl">{sim.title}</CardTitle>
-                  <CardDescription>{sim.description}</CardDescription>
-                </CardHeader>
-              </Card>
-            </Link>
+            <SimulationCard key={sim.path} sim={sim} />
           ))}
+        </div>
+
+        <div className="mt-12">
+          <Link
+            to="/design"
+            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Design System →
+          </Link>
         </div>
       </div>
     </div>

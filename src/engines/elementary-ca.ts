@@ -1,4 +1,4 @@
-export function getRuleLookup(ruleNum: number): Record<string, number> {
+function getRuleLookup(ruleNum: number): Record<string, number> {
   const lookup: Record<string, number> = {};
   for (let i = 0; i < 8; i++) {
     const pattern = i.toString(2).padStart(3, "0");

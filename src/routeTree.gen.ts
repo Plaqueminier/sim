@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ElementaryCaIndexRouteImport } from './routes/elementary-ca/index'
+import { Route as DesignIndexRouteImport } from './routes/design/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,30 +23,39 @@ const ElementaryCaIndexRoute = ElementaryCaIndexRouteImport.update({
   path: '/elementary-ca/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DesignIndexRoute = DesignIndexRouteImport.update({
+  id: '/design/',
+  path: '/design/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/design/': typeof DesignIndexRoute
   '/elementary-ca/': typeof ElementaryCaIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/design': typeof DesignIndexRoute
   '/elementary-ca': typeof ElementaryCaIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/design/': typeof DesignIndexRoute
   '/elementary-ca/': typeof ElementaryCaIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/elementary-ca/'
+  fullPaths: '/' | '/design/' | '/elementary-ca/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/elementary-ca'
-  id: '__root__' | '/' | '/elementary-ca/'
+  to: '/' | '/design' | '/elementary-ca'
+  id: '__root__' | '/' | '/design/' | '/elementary-ca/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DesignIndexRoute: typeof DesignIndexRoute
   ElementaryCaIndexRoute: typeof ElementaryCaIndexRoute
 }
 
@@ -65,11 +75,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ElementaryCaIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/design/': {
+      id: '/design/'
+      path: '/design'
+      fullPath: '/design/'
+      preLoaderRoute: typeof DesignIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DesignIndexRoute: DesignIndexRoute,
   ElementaryCaIndexRoute: ElementaryCaIndexRoute,
 }
 export const routeTree = rootRouteImport
