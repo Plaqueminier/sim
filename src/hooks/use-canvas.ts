@@ -1,4 +1,4 @@
-import { useRef, useEffect, useCallback } from "react";
+import { useRef, useEffect } from "react";
 
 export function useCanvas(
   draw: (ctx: CanvasRenderingContext2D, width: number, height: number) => void,
@@ -6,7 +6,7 @@ export function useCanvas(
 ) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const render = useCallback(() => {
+  useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -14,10 +14,6 @@ export function useCanvas(
     draw(ctx, canvas.width, canvas.height);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
-
-  useEffect(() => {
-    render();
-  }, [render]);
 
   return canvasRef;
 }

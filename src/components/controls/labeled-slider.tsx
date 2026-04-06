@@ -23,7 +23,9 @@ export function LabeledSlider({
   return (
     <div
       className="flex-1 space-y-1"
-      style={accent ? { "--sim-accent": accent } as React.CSSProperties : undefined}
+      style={
+        accent ? ({ "--sim-accent": accent } as React.CSSProperties) : undefined
+      }
     >
       <div className="flex items-center justify-between gap-2">
         <Label className="text-xs text-muted-foreground">{label}</Label>
@@ -33,7 +35,7 @@ export function LabeledSlider({
       </div>
       <Slider
         value={[value]}
-        onValueChange={([v]) => onChange(v!)}
+        onValueChange={([v = value]) => onChange(v)}
         min={min}
         max={max}
         step={step}

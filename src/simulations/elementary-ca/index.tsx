@@ -4,7 +4,7 @@ import { PlaybackBar, StatDisplay } from "@/components/controls";
 import { useAnimation } from "@/hooks/use-animation";
 import { useSimulationState } from "@/hooks/use-simulation-state";
 import { generateGrid } from "@/engines/elementary-ca";
-import { defaultEffectsConfig } from "./effects/types";
+import { defaultEffectsConfig, type EffectsConfig } from "./effects/types";
 import { Controls } from "./controls";
 import { EffectsPanel } from "./effects-panel";
 import { RuleVisualization } from "./rule-visualization";
@@ -19,38 +19,69 @@ function computeMaxWidth(): number {
   return w % 2 === 0 ? w - 1 : w;
 }
 
-const initialMaxWidth = computeMaxWidth();
+interface CASimState {
+  rule: number;
+  width: number;
+  maxWidth: number;
+  generations: number;
+  colorAlive: string;
+  colorDead: string;
+  initialState: "single" | "random";
+  effectsConfig: EffectsConfig;
+  seed: number;
+  speed: number;
+}
 
 export function ElementaryCA() {
-  const [state, update] = useSimulationState({
+  const maxWidth = computeMaxWidth();
+  const [state, update] = useSimulationState<CASimState>({
     rule: 30,
-    width: initialMaxWidth,
-    maxWidth: initialMaxWidth,
+    width: maxWidth,
+    maxWidth: maxWidth,
     generations: 150,
     colorAlive: "#ffffff",
     colorDead: "#0a0a0a",
-    initialState: "single" as "single" | "random",
+    initialState: "single",
     effectsConfig: defaultEffectsConfig(),
     seed: 0,
     speed: 1,
   });
 
+  // seed in deps forces re-computation on replay (for random initial states)
   const grid = useMemo(
-    () => generateGrid(state.rule, state.width, state.generations, state.initialState),
+    () =>
+      generateGrid(
+        state.rule,
+        state.width,
+        state.generations,
+        state.initialState,
+      ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [state.rule, state.width, state.generations, state.initialState, state.seed],
+    [
+      state.rule,
+      state.width,
+      state.generations,
+      state.initialState,
+      state.seed,
+    ],
   );
 
-  const anim = useAnimation(state.generations, BASE_DURATION_MS / state.speed);
+  const {
+    currentStep,
+    isPlaying,
+    play,
+    pause,
+    reset: animReset,
+  } = useAnimation(state.generations, BASE_DURATION_MS / state.speed);
 
   const handlePlay = useCallback(() => {
     update({ seed: state.seed + 1 });
-    anim.play();
-  }, [anim, state.seed, update]);
+    play();
+  }, [play, state.seed, update]);
 
   const handleReset = useCallback(() => {
-    anim.reset();
-  }, [anim]);
+    animReset();
+  }, [animReset]);
 
   const handleFitWidth = useCallback(() => {
     const mw = computeMaxWidth();
@@ -68,7 +99,8 @@ export function ElementaryCA() {
   }, [grid]);
 
   const totalCells = state.width * state.generations;
-  const alivePercent = totalCells > 0 ? ((aliveCount / totalCells) * 100).toFixed(1) : "0";
+  const alivePercent =
+    totalCells > 0 ? ((aliveCount / totalCells) * 100).toFixed(1) : "0";
 
   return (
     <SimulationPage
@@ -77,9 +109,9 @@ export function ElementaryCA() {
       accent="var(--sim-ca)"
       playback={
         <PlaybackBar
-          isPlaying={anim.isPlaying}
+          isPlaying={isPlaying}
           onPlay={handlePlay}
-          onPause={anim.pause}
+          onPause={pause}
           onReset={handleReset}
           speed={state.speed}
           onSpeedChange={(speed) => update({ speed })}
@@ -87,11 +119,7 @@ export function ElementaryCA() {
       }
       controls={
         <>
-          <Controls
-            state={state}
-            update={update}
-            onFitWidth={handleFitWidth}
-          />
+          <Controls state={state} update={update} onFitWidth={handleFitWidth} />
           <div className="my-4">
             <EffectsPanel
               config={state.effectsConfig}
@@ -125,9 +153,9 @@ export function ElementaryCA() {
           colorAlive={state.colorAlive}
           colorDead={state.colorDead}
           grid={grid}
-          visibleRows={anim.currentStep}
+          visibleRows={currentStep}
           effectsConfig={state.effectsConfig}
-          isAnimating={anim.isPlaying}
+          isAnimating={isPlaying}
         />
       }
     />

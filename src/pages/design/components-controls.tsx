@@ -22,7 +22,7 @@ const ACCENT_OPTIONS = [
 ];
 
 export function ComponentsControls() {
-  const [accent, setAccent] = useState(ACCENT_OPTIONS[0]!.value);
+  const [accent, setAccent] = useState("var(--sim-ca)");
   const [inputVal, setInputVal] = useState("");
   const [sliderVal, setSliderVal] = useState(30);
   const [switchVal, setSwitchVal] = useState(false);
@@ -51,12 +51,19 @@ export function ComponentsControls() {
               onClick={() => setAccent(opt.value)}
               className="flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-colors"
               style={{
-                background: accent === opt.value ? `color-mix(in srgb, ${opt.color} 20%, transparent)` : "transparent",
-                color: accent === opt.value ? opt.color : "var(--muted-foreground)",
+                background:
+                  accent === opt.value
+                    ? `color-mix(in srgb, ${opt.color} 20%, transparent)`
+                    : "transparent",
+                color:
+                  accent === opt.value ? opt.color : "var(--muted-foreground)",
                 border: `1px solid ${accent === opt.value ? opt.color : "transparent"}`,
               }}
             >
-              <div className="w-3 h-3 rounded-full" style={{ background: opt.color }} />
+              <div
+                className="w-3 h-3 rounded-full"
+                style={{ background: opt.color }}
+              />
               {opt.label}
             </button>
           ))}
@@ -66,24 +73,59 @@ export function ComponentsControls() {
       {/* MOLECULES */}
       <Section title="Molecules">
         <div className="space-y-6">
-          <Showcase title="LabeledInput" description="label, value, onChange, placeholder?, type?, accent?">
+          <Showcase
+            title="LabeledInput"
+            description="label, value, onChange, placeholder?, type?, accent?"
+          >
             <div className="max-w-sm">
-              <LabeledInput label="Name" value={inputVal} onChange={setInputVal} placeholder="Enter a name..." accent={accent} />
-              {inputVal && <p className="text-xs text-muted-foreground mt-2 font-mono">value: "{inputVal}"</p>}
+              <LabeledInput
+                label="Name"
+                value={inputVal}
+                onChange={setInputVal}
+                placeholder="Enter a name..."
+                accent={accent}
+              />
+              {inputVal && (
+                <p className="text-xs text-muted-foreground mt-2 font-mono">
+                  value: "{inputVal}"
+                </p>
+              )}
             </div>
           </Showcase>
 
-          <Showcase title="LabeledSlider" description="label, value, onChange, min, max, step, accent?">
+          <Showcase
+            title="LabeledSlider"
+            description="label, value, onChange, min, max, step, accent?"
+          >
             <div className="max-w-sm">
-              <LabeledSlider label="Rule" value={sliderVal} onChange={setSliderVal} min={0} max={255} step={1} accent={accent} />
+              <LabeledSlider
+                label="Rule"
+                value={sliderVal}
+                onChange={setSliderVal}
+                min={0}
+                max={255}
+                step={1}
+                accent={accent}
+              />
             </div>
           </Showcase>
 
-          <Showcase title="LabeledSwitch" description="label, checked, onChange, accent?">
-            <LabeledSwitch label="Enable bloom" checked={switchVal} onChange={setSwitchVal} accent={accent} />
+          <Showcase
+            title="LabeledSwitch"
+            description="label, checked, onChange, accent?"
+          >
+            <LabeledSwitch
+              label="Enable bloom"
+              checked={switchVal}
+              onChange={setSwitchVal}
+              accent={accent}
+            />
           </Showcase>
 
-          <Showcase title="OptionGroup" description="options, value, onChange, accent?">
+          <Showcase
+            title="OptionGroup"
+            description="options, value, onChange, accent?"
+          >
             <OptionGroup
               options={[
                 { value: "single", label: "Single" },
@@ -94,12 +136,24 @@ export function ComponentsControls() {
               onChange={setOptionVal}
               accent={currentColor}
             />
-            <p className="text-xs text-muted-foreground mt-2 font-mono">value: "{optionVal}"</p>
+            <p className="text-xs text-muted-foreground mt-2 font-mono">
+              value: "{optionVal}"
+            </p>
           </Showcase>
 
-          <Showcase title="ColorPicker" description="label, value, onChange, accent?">
-            <ColorPicker label="Alive color" value={colorVal} onChange={setColorVal} accent={currentColor} />
-            <p className="text-xs text-muted-foreground mt-2 font-mono">value: "{colorVal}"</p>
+          <Showcase
+            title="ColorPicker"
+            description="label, value, onChange, accent?"
+          >
+            <ColorPicker
+              label="Alive color"
+              value={colorVal}
+              onChange={setColorVal}
+              accent={currentColor}
+            />
+            <p className="text-xs text-muted-foreground mt-2 font-mono">
+              value: "{colorVal}"
+            </p>
           </Showcase>
         </div>
       </Section>
@@ -107,7 +161,10 @@ export function ComponentsControls() {
       {/* ORGANISMS */}
       <Section title="Organisms">
         <div className="space-y-6">
-          <Showcase title="PlaybackBar" description="isPlaying, onPlay, onPause, onReset, onStep?, speed, onSpeedChange, accent?">
+          <Showcase
+            title="PlaybackBar"
+            description="isPlaying, onPlay, onPause, onReset, onStep?, speed, onSpeedChange, accent?"
+          >
             <PlaybackBar
               isPlaying={isPlaying}
               onPlay={() => setIsPlaying(true)}
@@ -123,7 +180,10 @@ export function ComponentsControls() {
             </p>
           </Showcase>
 
-          <Showcase title="StatDisplay" description="stats: { label, value }[], accent?">
+          <Showcase
+            title="StatDisplay"
+            description="stats: { label, value }[], accent?"
+          >
             <div className="space-y-2">
               <StatDisplay
                 stats={[
@@ -135,28 +195,74 @@ export function ComponentsControls() {
                 accent={currentColor}
               />
               <div className="flex items-center gap-2 mt-2">
-                <Button size="sm" variant="ghost" onClick={() => setStatGen((g) => g + 1)}>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => setStatGen((g) => g + 1)}
+                >
                   Increment Generation
                 </Button>
-                <span className="text-xs text-muted-foreground font-mono">{statGen}</span>
+                <span className="text-xs text-muted-foreground font-mono">
+                  {statGen}
+                </span>
               </div>
             </div>
           </Showcase>
 
-          <Showcase title="ControlPanel" description="title, defaultOpen?, accent?, children">
+          <Showcase
+            title="ControlPanel"
+            description="title, defaultOpen?, accent?, children"
+          >
             <div className="space-y-2">
               <ControlPanel title="Visual Effects" defaultOpen accent={accent}>
-                <LabeledSwitch label="Bloom" checked={panelSwitch} onChange={setPanelSwitch} accent={accent} />
+                <LabeledSwitch
+                  label="Bloom"
+                  checked={panelSwitch}
+                  onChange={setPanelSwitch}
+                  accent={accent}
+                />
                 {panelSwitch && (
                   <div className="flex gap-4 ml-5">
-                    <LabeledSlider label="Intensity" value={panelSlider1} onChange={setPanelSlider1} min={0} max={100} step={1} accent={accent} />
-                    <LabeledSlider label="Radius" value={panelSlider2} onChange={setPanelSlider2} min={2} max={20} step={1} accent={accent} />
+                    <LabeledSlider
+                      label="Intensity"
+                      value={panelSlider1}
+                      onChange={setPanelSlider1}
+                      min={0}
+                      max={100}
+                      step={1}
+                      accent={accent}
+                    />
+                    <LabeledSlider
+                      label="Radius"
+                      value={panelSlider2}
+                      onChange={setPanelSlider2}
+                      min={2}
+                      max={20}
+                      step={1}
+                      accent={accent}
+                    />
                   </div>
                 )}
               </ControlPanel>
               <ControlPanel title="Grid Settings" accent={accent}>
-                <LabeledSlider label="Width" value={503} onChange={() => {}} min={11} max={1001} step={2} accent={accent} />
-                <LabeledSlider label="Generations" value={150} onChange={() => {}} min={10} max={500} step={10} accent={accent} />
+                <LabeledSlider
+                  label="Width"
+                  value={503}
+                  onChange={() => {}}
+                  min={11}
+                  max={1001}
+                  step={2}
+                  accent={accent}
+                />
+                <LabeledSlider
+                  label="Generations"
+                  value={150}
+                  onChange={() => {}}
+                  min={10}
+                  max={500}
+                  step={10}
+                  accent={accent}
+                />
               </ControlPanel>
             </div>
           </Showcase>

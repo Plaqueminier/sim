@@ -19,7 +19,9 @@ export function LabeledSwitch({
       size="sm"
       pressed={checked}
       onPressedChange={onChange}
-      style={accent ? { "--sim-accent": accent } as React.CSSProperties : undefined}
+      style={
+        accent ? ({ "--sim-accent": accent } as React.CSSProperties) : undefined
+      }
     >
       {label}
     </Toggle>

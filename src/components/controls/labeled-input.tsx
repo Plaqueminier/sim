@@ -21,7 +21,9 @@ export function LabeledInput({
   return (
     <div
       className="flex-1 space-y-1"
-      style={accent ? { "--sim-accent": accent } as React.CSSProperties : undefined}
+      style={
+        accent ? ({ "--sim-accent": accent } as React.CSSProperties) : undefined
+      }
     >
       <Label className="text-xs text-muted-foreground">{label}</Label>
       <Input
@@ -30,7 +32,14 @@ export function LabeledInput({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         className="h-8 text-sm"
-        style={accent ? { borderColor: "color-mix(in srgb, var(--sim-accent) 30%, transparent)" } : undefined}
+        style={
+          accent
+            ? {
+                borderColor:
+                  "color-mix(in srgb, var(--sim-accent) 30%, transparent)",
+              }
+            : undefined
+        }
       />
     </div>
   );

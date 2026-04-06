@@ -19,7 +19,12 @@ export function OptionGroup<T extends string>({
   accent,
 }: OptionGroupProps<T>) {
   return (
-    <div className="flex gap-1" style={accent ? { "--sim-accent": accent } as React.CSSProperties : undefined}>
+    <div
+      className="flex gap-1"
+      style={
+        accent ? ({ "--sim-accent": accent } as React.CSSProperties) : undefined
+      }
+    >
       {options.map((opt) => {
         const isActive = value === opt.value;
         return (
@@ -29,7 +34,14 @@ export function OptionGroup<T extends string>({
             size="sm"
             onClick={() => onChange(opt.value)}
             className="text-xs h-7 px-2"
-            style={isActive && accent ? { background: `color-mix(in srgb, ${accent} 20%, transparent)`, color: accent } : undefined}
+            style={
+              isActive && accent
+                ? {
+                    background: `color-mix(in srgb, ${accent} 20%, transparent)`,
+                    color: accent,
+                  }
+                : undefined
+            }
           >
             {opt.label}
           </Button>

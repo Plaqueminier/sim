@@ -23,11 +23,16 @@ export function SimulationPage({
   return (
     <div
       className="min-h-screen bg-background text-foreground"
-      style={accent ? { "--sim-accent": accent } as React.CSSProperties : undefined}
+      style={
+        accent ? ({ "--sim-accent": accent } as React.CSSProperties) : undefined
+      }
     >
       <div className="mx-auto max-w-7xl p-6 pb-0">
         <div className="mb-6">
-          <Link to="/" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
+          <Link
+            to="/"
+            className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+          >
             ← Back to home
           </Link>
         </div>

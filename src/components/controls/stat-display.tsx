@@ -13,7 +13,12 @@ interface StatDisplayProps {
 
 export function StatDisplay({ stats, accent, className }: StatDisplayProps) {
   return (
-    <div className={cn("flex gap-6 bg-surface-1 rounded-lg px-4 py-2.5", className)}>
+    <div
+      className={cn(
+        "flex gap-6 bg-surface-1 rounded-lg px-4 py-2.5",
+        className,
+      )}
+    >
       {stats.map((stat) => (
         <div key={stat.label} className="flex items-center gap-1.5 text-xs">
           <span className="text-muted-foreground">{stat.label}</span>

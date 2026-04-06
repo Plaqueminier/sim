@@ -58,7 +58,10 @@ export function buildColorLUT(palette: Palette): string[] {
     const pos = (i / 255) * segments;
     const segIndex = Math.min(Math.floor(pos), segments - 1);
     const t = pos - segIndex;
-    lut[i] = lerp(stops[segIndex]!, stops[segIndex + 1]!, t);
+    const a = stops[segIndex];
+    const b = stops[segIndex + 1];
+    if (!a || !b) continue;
+    lut[i] = lerp(a, b, t);
   }
 
   lutCache.set(palette, lut);

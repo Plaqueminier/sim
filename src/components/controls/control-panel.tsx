@@ -29,7 +29,9 @@ export function ControlPanel({
       open={open}
       onOpenChange={setOpen}
       className={cn("bg-surface-1 rounded-lg overflow-hidden", className)}
-      style={accent ? { "--sim-accent": accent } as React.CSSProperties : undefined}
+      style={
+        accent ? ({ "--sim-accent": accent } as React.CSSProperties) : undefined
+      }
     >
       <CollapsibleTrigger className="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
         <span>{title}</span>
@@ -42,9 +44,7 @@ export function ControlPanel({
         />
       </CollapsibleTrigger>
       <CollapsibleContent>
-        <div className="px-4 pb-4 space-y-4">
-          {children}
-        </div>
+        <div className="px-4 pb-4 space-y-4">{children}</div>
       </CollapsibleContent>
     </Collapsible>
   );

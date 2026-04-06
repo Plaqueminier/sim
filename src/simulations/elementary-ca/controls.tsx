@@ -56,7 +56,12 @@ export function Controls({ state, update, onFitWidth }: ControlsProps) {
             max={state.maxWidth}
             step={2}
           />
-          <Button variant="ghost" size="sm" onClick={onFitWidth} className="text-xs h-7">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onFitWidth}
+            className="text-xs h-7"
+          >
             Fit
           </Button>
         </div>
@@ -71,8 +76,16 @@ export function Controls({ state, update, onFitWidth }: ControlsProps) {
       </div>
 
       <div className="flex flex-wrap gap-4 items-center">
-        <ColorPicker label="Alive" value={state.colorAlive} onChange={(colorAlive) => update({ colorAlive })} />
-        <ColorPicker label="Dead" value={state.colorDead} onChange={(colorDead) => update({ colorDead })} />
+        <ColorPicker
+          label="Alive"
+          value={state.colorAlive}
+          onChange={(colorAlive) => update({ colorAlive })}
+        />
+        <ColorPicker
+          label="Dead"
+          value={state.colorDead}
+          onChange={(colorDead) => update({ colorDead })}
+        />
       </div>
     </ControlPanel>
   );

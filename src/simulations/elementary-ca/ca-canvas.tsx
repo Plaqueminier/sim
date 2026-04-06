@@ -55,11 +55,20 @@ export function CACanvas({
         applyBloom(canvas, ctx, effectsConfig.bloom);
       }
     },
-    [grid, visibleRows, cellSize, colorAlive, colorDead, effectsConfig, isAnimating],
+    [
+      grid,
+      visibleRows,
+      cellSize,
+      colorAlive,
+      colorDead,
+      effectsConfig,
+      isAnimating,
+    ],
   );
 
   const usePixelated =
-    !effectsConfig.cellShape.enabled || effectsConfig.cellShape.mode === "square";
+    !effectsConfig.cellShape.enabled ||
+    effectsConfig.cellShape.mode === "square";
 
   return (
     <CanvasRenderer

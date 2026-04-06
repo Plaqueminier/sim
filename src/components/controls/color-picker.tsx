@@ -7,7 +7,12 @@ interface ColorPickerProps {
   accent?: string;
 }
 
-export function ColorPicker({ label, value, onChange, accent }: ColorPickerProps) {
+export function ColorPicker({
+  label,
+  value,
+  onChange,
+  accent,
+}: ColorPickerProps) {
   return (
     <div className="flex items-center gap-2">
       <input

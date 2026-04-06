@@ -10,7 +10,8 @@ function ensureOffscreen(w: number, h: number): CanvasRenderingContext2D {
     offscreen.height = h;
     offscreenCtx = offscreen.getContext("2d");
   }
-  return offscreenCtx!;
+  if (!offscreenCtx) throw new Error("2d context unavailable");
+  return offscreenCtx;
 }
 
 export function applyBloom(
@@ -30,6 +31,6 @@ export function applyBloom(
   targetCtx.save();
   targetCtx.globalCompositeOperation = "screen";
   targetCtx.globalAlpha = config.intensity;
-  targetCtx.drawImage(offscreen!, 0, 0);
+  if (offscreen) targetCtx.drawImage(offscreen, 0, 0);
   targetCtx.restore();
 }

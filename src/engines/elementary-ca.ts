@@ -26,14 +26,15 @@ export function generateGrid(
 
   const grid: number[][] = [firstRow];
   for (let g = 1; g < generations; g++) {
-    const prevRow = grid[g - 1]!;
+    const prevRow = grid[g - 1];
+    if (!prevRow) break;
     const newRow = new Array(width).fill(0) as number[];
     for (let i = 0; i < width; i++) {
-      const left = prevRow[(i - 1 + width) % width]!;
-      const center = prevRow[i]!;
-      const right = prevRow[(i + 1) % width]!;
+      const left = prevRow[(i - 1 + width) % width] ?? 0;
+      const center = prevRow[i] ?? 0;
+      const right = prevRow[(i + 1) % width] ?? 0;
       const pattern = `${left}${center}${right}`;
-      newRow[i] = ruleLookup[pattern]!;
+      newRow[i] = ruleLookup[pattern] ?? 0;
     }
     grid.push(newRow);
   }

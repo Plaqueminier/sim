@@ -14,14 +14,17 @@ function countNeighbors(
   w: number,
 ): number {
   let count = 0;
-  const row = grid[y]!;
+  const row = grid[y];
+  if (!row) return count;
   if (x > 0 && row[x - 1]) count++;
   if (x < w - 1 && row[x + 1]) count++;
   if (y > 0) {
-    const prev = grid[y - 1]!;
-    if (prev[x]) count++;
-    if (x > 0 && prev[x - 1]) count++;
-    if (x < w - 1 && prev[x + 1]) count++;
+    const prev = grid[y - 1];
+    if (prev) {
+      if (prev[x]) count++;
+      if (x > 0 && prev[x - 1]) count++;
+      if (x < w - 1 && prev[x + 1]) count++;
+    }
   }
   return count;
 }
@@ -40,7 +43,9 @@ export function drawCells(
 ): void {
   const rows = Math.min(visibleRows, grid.length);
   if (rows === 0) return;
-  const w = grid[0]!.length;
+  const firstRow = grid[0];
+  if (!firstRow) return;
+  const w = firstRow.length;
   const useGradient = gradientConfig.enabled;
   const useShape = shapeConfig.enabled;
   const useScanline = scanlineConfig.enabled && isAnimating;
@@ -54,7 +59,8 @@ export function drawCells(
   if (!useGradient && !useShape && !useScanline) {
     ctx.fillStyle = colorAlive;
     for (let y = 0; y < rows; y++) {
-      const row = grid[y]!;
+      const row = grid[y];
+      if (!row) continue;
       for (let x = 0; x < w; x++) {
         if (row[x] === 1) {
           ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
@@ -65,7 +71,8 @@ export function drawCells(
   }
 
   for (let y = 0; y < rows; y++) {
-    const row = grid[y]!;
+    const row = grid[y];
+    if (!row) continue;
 
     if (useScanline) {
       const dist = rows - 1 - y;
@@ -95,7 +102,7 @@ export function drawCells(
           const n = countNeighbors(grid, x, y, w);
           index = Math.min(n * 51, 255);
         }
-        ctx.fillStyle = lut[index]!;
+        ctx.fillStyle = lut[index] ?? colorAlive;
       } else {
         ctx.fillStyle = colorAlive;
       }
@@ -121,7 +128,7 @@ export function drawCells(
         if (x < w - 1 && row[x + 1] === 1) {
           ctx.fillRect(px + half, py + half - r * 0.5, cellSize, r);
         }
-        if (y < rows - 1 && grid[y + 1]![x] === 1) {
+        if (y < rows - 1 && grid[y + 1]?.[x] === 1) {
           ctx.fillRect(px + half - r * 0.5, py + half, r, cellSize);
         }
       }

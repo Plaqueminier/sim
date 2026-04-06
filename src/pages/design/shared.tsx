@@ -1,7 +1,13 @@
 import { Separator } from "@/components/ui/separator";
 import type { ReactNode } from "react";
 
-export function Section({ title, children }: { title: string; children: ReactNode }) {
+export function Section({
+  title,
+  children,
+}: {
+  title: string;
+  children: ReactNode;
+}) {
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-semibold">{title}</h2>
@@ -22,7 +28,9 @@ export function Showcase({
 }) {
   return (
     <div>
-      <h3 className="text-sm font-medium text-muted-foreground mb-1">{title}</h3>
+      <h3 className="text-sm font-medium text-muted-foreground mb-1">
+        {title}
+      </h3>
       {description && (
         <p className="text-xs text-muted-foreground/70 mb-3">{description}</p>
       )}
@@ -33,10 +41,21 @@ export function Showcase({
   );
 }
 
-export function ColorSwatch({ name, value, cssVar }: { name: string; value: string; cssVar: string }) {
+export function ColorSwatch({
+  name,
+  value,
+  cssVar,
+}: {
+  name: string;
+  value: string;
+  cssVar: string;
+}) {
   return (
     <div className="flex flex-col items-center gap-2">
-      <div className="w-16 h-16 rounded-lg border border-border" style={{ background: value }} />
+      <div
+        className="w-16 h-16 rounded-lg border border-border"
+        style={{ background: value }}
+      />
       <span className="text-xs font-medium">{name}</span>
       <span className="text-xs font-mono text-muted-foreground">{cssVar}</span>
     </div>

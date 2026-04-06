@@ -6,7 +6,8 @@ const demoCards: SimulationMeta[] = [
   {
     path: "/elementary-ca",
     title: "Elementary Cellular Automata",
-    description: "Explore Wolfram's 256 rules of 1D binary cellular automata. Watch patterns emerge from simple rules.",
+    description:
+      "Explore Wolfram's 256 rules of 1D binary cellular automata. Watch patterns emerge from simple rules.",
     category: "Automata",
     accent: "var(--sim-ca)",
   },
@@ -37,7 +38,10 @@ export function ComponentsCatalog() {
   return (
     <div className="space-y-12">
       <Section title="Simulation Cards">
-        <Showcase title="SimulationCard" description="sim: { path, title, description, category, accent }">
+        <Showcase
+          title="SimulationCard"
+          description="sim: { path, title, description, category, accent }"
+        >
           <div className="grid gap-4">
             {demoCards.map((sim) => (
               <SimulationCard key={sim.path} sim={sim} />

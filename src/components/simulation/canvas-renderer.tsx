@@ -16,7 +16,9 @@ export function CanvasRenderer({
   className,
 }: CanvasRendererProps) {
   return (
-    <div className={cn("flex justify-center items-center bg-secondary", className)}>
+    <div
+      className={cn("flex justify-center items-center bg-secondary", className)}
+    >
       <canvas
         ref={canvasRef}
         width={width}
