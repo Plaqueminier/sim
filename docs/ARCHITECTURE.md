@@ -4,17 +4,17 @@ Interactive computational simulations built with React 19 + TypeScript + Tailwin
 
 ## Tech Stack
 
-| Layer      | Tool                                   |
-| ---------- | -------------------------------------- |
-| Framework  | React 19                               |
-| Routing    | TanStack Router (file-based)           |
-| Styling    | Tailwind CSS 4 (Vite plugin)           |
-| Components | shadcn/ui (Radix primitives)           |
-| Language   | TypeScript                             |
-| Bundler    | Vite 8                                 |
-| Runtime    | Bun                                    |
-| Linting    | ESLint 10 + typescript-eslint          |
-| Formatting | Prettier                               |
+| Layer      | Tool                          |
+| ---------- | ----------------------------- |
+| Framework  | React 19                      |
+| Routing    | TanStack Router (file-based)  |
+| Styling    | Tailwind CSS 4 (Vite plugin)  |
+| Components | shadcn/ui (Radix primitives)  |
+| Language   | TypeScript                    |
+| Bundler    | Vite 8                        |
+| Runtime    | Bun                           |
+| Linting    | ESLint 10 + typescript-eslint |
+| Formatting | Prettier                      |
 
 ## Project Structure
 
@@ -49,21 +49,21 @@ Dark-only. No light mode. All surfaces, borders, and colors are defined as CSS c
 
 **Surfaces** (layered, lightest → darkest):
 
-| Token          | Value   | Usage                  |
-| -------------- | ------- | ---------------------- |
-| `--background` | #0d0a04 | Page background        |
-| `--surface-1`  | #1a1308 | Cards, panels          |
-| `--surface-2`  | #231b0e | Elevated panels        |
-| `--surface-3`  | #2e2314 | Highest elevation      |
+| Token          | Value   | Usage             |
+| -------------- | ------- | ----------------- |
+| `--background` | #0d0a04 | Page background   |
+| `--surface-1`  | #1a1308 | Cards, panels     |
+| `--surface-2`  | #231b0e | Elevated panels   |
+| `--surface-3`  | #2e2314 | Highest elevation |
 
 **Text hierarchy**:
 
-| Token                 | Value   | Usage               |
-| --------------------- | ------- | ------------------- |
-| `--foreground`        | #e2e8f0 | Primary text        |
-| `--muted-foreground`  | #94a3b8 | Labels, descriptions|
-| `--subtle-foreground` | #64748b | Hints               |
-| `--faint-foreground`  | #334155 | Disabled / very dim |
+| Token                 | Value   | Usage                |
+| --------------------- | ------- | -------------------- |
+| `--foreground`        | #e2e8f0 | Primary text         |
+| `--muted-foreground`  | #94a3b8 | Labels, descriptions |
+| `--subtle-foreground` | #64748b | Hints                |
+| `--faint-foreground`  | #334155 | Disabled / very dim  |
 
 **Semantic**: `--primary` (#f59e0b amber), `--destructive` (#ef4444), `--border`, `--input`, `--ring`.
 
@@ -71,14 +71,14 @@ Dark-only. No light mode. All surfaces, borders, and colors are defined as CSS c
 
 Each simulation has a unique accent color, defined globally:
 
-| Variable           | Color   | Simulation   |
-| ------------------ | ------- | ------------ |
-| `--sim-ca`         | #a78bfa | CA (violet)  |
-| `--sim-sorting`    | #2dd4bf | Sorting      |
-| `--sim-life`       | #4ade80 | Life         |
-| `--sim-particles`  | #fb923c | Particles    |
-| `--sim-pathfinding`| #f472b6 | Pathfinding  |
-| `--sim-physics`    | #38bdf8 | Physics      |
+| Variable            | Color   | Simulation  |
+| ------------------- | ------- | ----------- |
+| `--sim-ca`          | #a78bfa | CA (violet) |
+| `--sim-sorting`     | #2dd4bf | Sorting     |
+| `--sim-life`        | #4ade80 | Life        |
+| `--sim-particles`   | #fb923c | Particles   |
+| `--sim-pathfinding` | #f472b6 | Pathfinding |
+| `--sim-physics`     | #38bdf8 | Physics     |
 
 Components accept an optional `accent` prop. The simulation page sets `--sim-accent` as an inline CSS variable, and controls use `color-mix(in srgb, <accent> 20%, transparent)` for tinted backgrounds. No accent → default secondary styling.
 
@@ -89,6 +89,7 @@ Components accept an optional `accent` prop. The simulation page sets `--sim-acc
 **Molecules** (`components/controls/`) — reusable across all simulations: LabeledSlider, LabeledSwitch, LabeledInput, OptionGroup, ColorPicker, ControlPanel, PlaybackBar, StatDisplay. All accent-aware.
 
 **Layout** (`components/simulation/`) — generic simulation shell:
+
 - `SimulationPage` — standard page layout (header, playback, controls, stats, canvas)
 - `CanvasRenderer` — canvas element with optional `image-rendering: pixelated`
 
@@ -125,6 +126,7 @@ Implements [Wolfram's elementary CA](https://en.wikipedia.org/wiki/Elementary_ce
 3. Full grid rendered on `<canvas>` with configurable visual effects (bloom, gradients, cell shapes, scanline).
 
 **Files**:
+
 - `engines/elementary-ca.ts` — `generateGrid()`, pure computation
 - `simulations/elementary-ca/index.tsx` — page state + wiring
 - `simulations/elementary-ca/ca-canvas.tsx` — canvas rendering via `useCanvas`
